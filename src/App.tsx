@@ -1,35 +1,59 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
+interface Task  {
+  id: number;
+  text: string;
+  done: boolean;
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [newTask, setNewTask] = useState("")
+
+  const handleAddTask = () => {
+    if (newTask.trim() === "") return;
+
+    const novaTarefa: Task = {
+      id: Date.now(),
+      text: newTask,
+      done: false,
+    };
+
+    setTasks([...tasks, novaTarefa]);
+    setNewTask("");
+  }
+
+  const toggleTaskdone = (id: number) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? {...task, done: !task.done} : task
+    ))
+  }
 
   return (
-    <>
+    <div>
+        <h1>Yasmin's To-Do List</h1>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {tasks.length === 0 ? (
+          <p>No tasks around here...</p>
+        ) : (
+        <ul>
+          {tasks.map((task) => (
+            <li key={task.id}
+            onClick={() => toggleTaskdone(task.id)} 
+            style={{cursor: "pointer", textDecoration: task.done ? "line-through" : "none"}}>{task.text}</li>
+          ))}
+        </ul>
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div>
+        <input value={newTask} onChange={(e) => setNewTask(e.target.value)} placeholder='Add a new task...'/>
+        <button onClick={handleAddTask}>Add</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
 export default App
+ 
