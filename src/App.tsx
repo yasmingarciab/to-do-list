@@ -31,9 +31,9 @@ function App() {
   }
 
   return (
-    <div>
+    <div className='header'>
         <h1>Yasmin's To-Do List</h1>
-      <div>
+      <div className='output'>
         {tasks.length === 0 ? (
           <p>No tasks around here...</p>
         ) : (
@@ -47,7 +47,7 @@ function App() {
         )}
       </div>
 
-      <div>
+      <div className='input'>
         <input value={newTask} onChange={(e) => setNewTask(e.target.value)} placeholder='Add a new task...'/>
         <button onClick={handleAddTask}>Add</button>
       </div>
